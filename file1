@@ -1,0 +1,556 @@
+#include <stdio.h>
+#define MAX_SIZE 100
+
+int arr[MAX_SIZE];
+int size = 0;
+
+void createArray() {
+    printf("Enter the number of elements: ");
+    scanf("%d", &size);
+    
+    printf("Enter the elements:\n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+}
+
+void displayArray() {
+    printf("Array Elements:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+void insertElement() {
+    int elem, pos;
+    
+    printf("Enter the element to insert: ");
+    scanf("%d", &elem);
+    
+    printf("Enter the position to insert: ");
+    scanf("%d", &pos);
+    
+    if (pos < 0 || pos > size) {
+        printf("Invalid position!\n");
+        return;
+    }
+    
+    for (int i = size - 1; i >= pos; i--) {
+        arr[i + 1] = arr[i];
+    }
+    
+    arr[pos] = elem;
+    size++;
+    
+    printf("Element %d inserted at position %d.\n", elem, pos);
+}
+
+void deleteElement() {
+    int pos;
+    
+    printf("Enter the position to delete: ");
+    scanf("%d", &pos);
+    
+    if (pos < 0 || pos >= size) {
+        printf("Invalid position!\n");
+        return;
+    }
+    
+    int elem = arr[pos];
+    
+    for (int i = pos; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    
+    size--;
+    
+    printf("Element %d deleted from position %d.\n", elem, pos);
+}
+
+int main() {
+    int choice;
+    
+    do {
+        printf("\n*** ARRAY MENU ***\n");
+        printf("1. Create Array\n");
+        printf("2. Display Array\n");
+        printf("3. Insert Element\n");
+        printf("4. Delete Element\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                createArray();
+                break;
+                
+            case 2:
+                displayArray();
+                break;
+                
+            case 3:
+                insertElement();
+                break;
+                
+            case 4:
+                deleteElement();
+                break;
+                
+            case 5:
+                printf("Exiting the program...\n");
+                break;
+                
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+    
+    return 0;
+}
+
+//pg1
+#include <stdio.h>
+#include <string.h>
+
+void findAndReplace(char *mainString, char *patternString, char *replaceString);
+
+int main() {
+    char mainString[100];
+    char patternString[100];
+    char replaceString[100];
+
+    printf("Enter the main string: ");
+    scanf("%s", mainString);
+
+    printf("Enter the pattern string: ");
+    scanf("%s", patternString);
+
+    printf("Enter the replace string: ");
+    scanf("%s", replaceString);
+
+    findAndReplace(mainString, patternString, replaceString);
+
+    return 0;
+}
+
+void findAndReplace(char *mainString, char *patternString, char *replaceString) {
+    char *match;
+    char temp[100];
+    int count = 0;
+
+    strcpy(temp, mainString);
+    match = strstr(temp, patternString);
+
+    while (match != NULL) {
+        count++;
+        strncpy(match, replaceString, strlen(replaceString));
+        match = strstr(match + strlen(replaceString), patternString);
+    }
+
+    if (count > 0) {
+        printf("Modified string: %s\n", temp);
+    } else {
+        printf("Pattern not found in the main string.\n");
+    }
+}
+
+//pg2
+#include <stdio.h>
+
+#define MAX_CUSTOMERS 10
+
+struct Customer {
+    char name[50];
+    int accountNumber;
+    double balance;
+};
+
+void printCustomersWithLowBalance(struct Customer customers[], int numCustomers) {
+    int i;
+    printf("Customers with balance less than $200:\n");
+    
+    for (i = 0; i < numCustomers; i++) {
+        if (customers[i].balance < 200.0) {
+            printf("%s\n", customers[i].name);
+        }
+    }
+}
+
+void incrementBalance(struct Customer customers[], int numCustomers) {
+    int i;
+    printf("\nIncremented balances:\n");
+    
+    for (i = 0; i < numCustomers; i++) {
+        if (customers[i].balance > 1000.0) {
+            customers[i].balance += 100.0;
+            printf("%s: %.2f\n", customers[i].name, customers[i].balance);
+        }
+    }
+}
+
+int main() {
+    struct Customer customers[MAX_CUSTOMERS];
+    int numCustomers, i;
+
+    printf("Enter the number of customers (up to %d): ", MAX_CUSTOMERS);
+    scanf("%d", &numCustomers);
+
+    for (i = 0; i < numCustomers; i++) {
+        printf("\nCustomer %d:\n", i + 1);
+        printf("Enter name: ");
+        scanf("%s", customers[i].name);
+        printf("Enter account number: ");
+        scanf("%d", &customers[i].accountNumber);
+        printf("Enter balance: ");
+        scanf("%lf", &customers[i].balance);
+    }
+
+    printCustomersWithLowBalance(customers, numCustomers);
+    incrementBalance(customers, numCustomers);
+
+    return 0;
+}
+//pg3
+#include <stdio.h>
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+void push(int element) {
+    if (top == MAX - 1) {
+        printf("Stack Overflow! Cannot push element %d\n", element);
+    } else {
+        top++;
+        stack[top] = element;
+        printf("Element %d pushed to the stack.\n", element);
+    }
+}
+
+void pop() {
+    if (top == -1) {
+        printf("Stack Underflow! Cannot pop element from an empty stack.\n");
+    } else {
+        int element = stack[top];
+        top--;
+        printf("Element %d popped from the stack.\n", element);
+    }
+}
+
+void displayStack() {
+    if (top == -1) {
+        printf("Stack is empty.\n");
+    } else {
+        printf("Stack elements: ");
+        for (int i = top; i >= 0; i--) {
+            printf("%d ", stack[i]);
+        }
+        printf("\n");
+    }
+}
+
+int isPalindrome(char str[]) {
+    int i = 0, j = top;
+    while (i < j) {
+        if (str[i] != stack[j]) {
+            return 0; // Not a palindrome
+        }
+        i++;
+        j--;
+    }
+    return 1; // Palindrome
+}
+
+int main() {
+    int choice, element;
+    char str[MAX];
+
+    do {
+        printf("\n*** STACK MENU ***\n");
+        printf("1. Push an Element\n");
+        printf("2. Pop an Element\n");
+        printf("3. Check Palindrome\n");
+        printf("4. Display Stack\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the element to push: ");
+                scanf("%d", &element);
+                push(element);
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                printf("Enter a string to check palindrome: ");
+                scanf("%s", str);
+                top = -1; // Reset stack
+                for (int i = 0; str[i] != '\0'; i++) {
+                    push(str[i]);
+                }
+                if (isPalindrome(str)) {
+                    printf("The string \"%s\" is a palindrome.\n", str);
+                } else {
+                    printf("The string \"%s\" is not a palindrome.\n", str);
+                }
+                break;
+
+            case 4:
+                displayStack();
+                break;
+
+            case 5:
+                printf("Exiting the program...\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+//pg4
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_STACK_SIZE 100
+
+struct Stack {
+    char items[MAX_STACK_SIZE];
+    int top;
+};
+
+void initialize(struct Stack* stack) {
+    stack->top = -1;
+}
+
+int isEmpty(struct Stack* stack) {
+    return stack->top == -1;
+}
+
+int isFull(struct Stack* stack) {
+    return stack->top == MAX_STACK_SIZE - 1;
+}
+
+void push(struct Stack* stack, char item) {
+    if (isFull(stack)) {
+        printf("Stack Overflow!\n");
+        exit(EXIT_FAILURE);
+    }
+    stack->items[++(stack->top)] = item;
+}
+
+char pop(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack Underflow!\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->items[(stack->top)--];
+}
+
+char peek(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack Underflow!\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->items[stack->top];
+}
+
+int precedence(char operator) {
+    switch (operator) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+        case '%':
+            return 2;
+        case '^':
+            return 3;
+        default:
+            return 0;
+    }
+}
+
+int isOperator(char character) {
+    return (character == '+' || character == '-' || character == '*' || character == '/' || character == '%' || character == '^');
+}
+
+int isOperand(char character) {
+    return isalnum(character);
+}
+
+void infixToPostfix(char infix[], char postfix[]) {
+    struct Stack stack;
+    initialize(&stack);
+
+    int i = 0;
+    int j = 0;
+
+    while (infix[i] != '\0') {
+        char current = infix[i];
+
+        if (isOperand(current)) {
+            postfix[j++] = current;
+        } else if (current == '(') {
+            push(&stack, current);
+        } else if (current == ')') {
+            while (!isEmpty(&stack) && peek(&stack) != '(') {
+                postfix[j++] = pop(&stack);
+            }
+            if (!isEmpty(&stack) && peek(&stack) != '(') {
+                printf("Invalid Expression!\n");
+                exit(EXIT_FAILURE);
+            }
+            pop(&stack); // Pop '(' from the stack
+        } else if (isOperator(current)) {
+            while (!isEmpty(&stack) && precedence(current) <= precedence(peek(&stack))) {
+                postfix[j++] = pop(&stack);
+            }
+            push(&stack, current);
+        } else {
+            printf("Invalid Expression!\n");
+            exit(EXIT_FAILURE);
+        }
+
+        i++;
+    }
+
+    while (!isEmpty(&stack)) {
+        if (peek(&stack) == '(') {
+            printf("Invalid Expression!\n");
+            exit(EXIT_FAILURE);
+        }
+        postfix[j++] = pop(&stack);
+    }
+
+    postfix[j] = '\0';
+}
+
+int main() {
+    char infix[100];
+    char postfix[100];
+
+    printf("Enter the Infix Expression: ");
+    scanf("%[^\n]s", infix);
+
+    infixToPostfix(infix, postfix);
+
+    printf("Postfix Expression: %s\n", postfix);
+
+    return 0;
+}
+//pg5
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
+
+#define MAX_STACK_SIZE 100
+
+struct Stack {
+    int items[MAX_STACK_SIZE];
+    int top;
+};
+
+void initialize(struct Stack* stack) {
+    stack->top = -1;
+}
+
+int isEmpty(struct Stack* stack) {
+    return stack->top == -1;
+}
+
+int isFull(struct Stack* stack) {
+    return stack->top == MAX_STACK_SIZE - 1;
+}
+
+void push(struct Stack* stack, int item) {
+    if (isFull(stack)) {
+        printf("Stack Overflow!\n");
+        exit(EXIT_FAILURE);
+    }
+    stack->items[++(stack->top)] = item;
+}
+
+int pop(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack Underflow!\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->items[(stack->top)--];
+}
+
+int evaluatePostfix(char postfix[]) {
+    struct Stack stack;
+    initialize(&stack);
+
+    int i = 0;
+    while (postfix[i] != '\0') {
+        char current = postfix[i];
+
+        if (isdigit(current)) {
+            push(&stack, current - '0');
+        } else if (current == ' ') {
+            // Ignore spaces
+        } else {
+            int operand2 = pop(&stack);
+            int operand1 = pop(&stack);
+            int result;
+
+            switch (current) {
+                case '+':
+                    result = operand1 + operand2;
+                    break;
+                case '-':
+                    result = operand1 - operand2;
+                    break;
+                case '*':
+                    result = operand1 * operand2;
+                    break;
+                case '/':
+                    result = operand1 / operand2;
+                    break;
+                case '%':
+                    result = operand1 % operand2;
+                    break;
+                case '^':
+                    result = pow(operand1, operand2);
+                    break;
+                default:
+                    printf("Invalid Operator!\n");
+                    exit(EXIT_FAILURE);
+            }
+
+            push(&stack, result);
+        }
+
+        i++;
+    }
+
+    return pop(&stack);
+}
+
+int main() {
+    char postfix[100];
+
+    printf("Enter the Postfix Expression: ");
+    fgets(postfix, sizeof(postfix), stdin);
+
+    int result = evaluatePostfix(postfix);
+
+    printf("Result: %d\n", result);
+
+    return 0;
+}
+
+//pg6
